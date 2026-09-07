@@ -1,0 +1,24 @@
+# Private inputs and local artifacts
+.env
+.env.*
+*.pem
+*.key
+data/
+private/
+raw/
+credentials/
+*.csv
+*.parquet
+*.dta
+*.xlsx
+*.docx
+*.pdf
+*.pkl
+*.joblib
+*.log
+.ipynb_checkpoints/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.DS_Store
