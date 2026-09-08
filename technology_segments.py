@@ -1,5 +1,13 @@
 """Representative reconstruction of the resume-described embedding workflow.
 
+Research status and code availability
+-------------------------------------
+The research is currently under review. The full research code and data
+are proprietary and are not distributed here. This file is a simplified
+sample of the general workflow, not the complete research implementation
+or a replication package.
+
+
 Values below illustrate implementation choices, not recovered research settings.
 Input is repository-level lists of languages from an approved pre-treatment
 corpus. This excerpt clusters languages; assigning user segments requires a

@@ -1,5 +1,7 @@
 # Measurement and causal design
 
+> **Research status and code availability:** The research is currently under review. The full research code and data are proprietary and are not distributed here. The public code consists only of selected, simplified samples of the general workflow; it is not the complete research implementation or a replication package.
+
 ## From traces to outcomes
 
 Code development combines repository creation, commits, and pull requests. Knowledge sharing combines reviews, issues, and discussions. Skill acquisition is operationalized as first observed use of a programming language in a developer's repository history. Historical coverage is essential: starting the history at the estimation window would falsely classify previously used languages as new.

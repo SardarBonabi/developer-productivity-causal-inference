@@ -127,6 +127,8 @@ For product work, that supports a more precise measurement strategy. It does not
 
 ## Explore the implementation
 
+> **Research status and code availability:** The research is currently under review. The full research code and data are proprietary and are not distributed here. The public code consists only of selected, simplified samples of the general workflow; it is not the complete research implementation or a replication package.
+
 | Start here | What to inspect |
 |---|---|
 | [Collection workflow](collection.py) | Paginated acquisition, bounded retries, and persistence before checkpoint advancement |

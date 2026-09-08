@@ -1,5 +1,13 @@
 """Readable model contract, not the proprietary estimator implementation.
 
+Research status and code availability
+-------------------------------------
+The research is currently under review. The full research code and data
+are proprietary and are not distributed here. This file is a simplified
+sample of the general workflow, not the complete research implementation
+or a replication package.
+
+
 A fixed-effects PPML backend is deliberately omitted. No OLS approximation is
 presented as a substitute for the research estimator.
 """

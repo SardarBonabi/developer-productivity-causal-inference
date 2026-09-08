@@ -1,5 +1,13 @@
 """Representative reconstruction of the archive's paginated collection workflow.
 
+Research status and code availability
+-------------------------------------
+The research is currently under review. The full research code and data
+are proprietary and are not distributed here. This file is a simplified
+sample of the general workflow, not the complete research implementation
+or a replication package.
+
+
 No live endpoint, credentials, or storage implementation is included. Callbacks
 make the acquisition, persistence, and checkpoint responsibilities explicit.
 The production pipeline also used parallel collection and SQL/NoSQL storage.

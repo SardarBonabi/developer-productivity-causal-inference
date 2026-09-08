@@ -1,5 +1,7 @@
 # Sample code and provenance
 
+> **Research status and code availability:** The research is currently under review. The full research code and data are proprietary and are not distributed here. The public code consists only of selected, simplified samples of the general workflow; it is not the complete research implementation or a replication package.
+
 The research accomplishments are described from Sardar Fatooreh Bonabi's account of his completed work. The manuscripts provide study context and findings. This release selectively illustrates methods without distributing the full proprietary implementations.
 
 | File | Relationship to the research |

@@ -1,5 +1,13 @@
 """Condensed research feature examples; no private data or file paths.
 
+Research status and code availability
+-------------------------------------
+The research is currently under review. The full research code and data
+are proprietary and are not distributed here. This file is a simplified
+sample of the general workflow, not the complete research implementation
+or a replication package.
+
+
 first_language_use refactors the supplied chronological language-detection logic.
 Same-time repositories are pooled to avoid arbitrary row-order attribution.
 weekly_activity is a representative consolidation of the activity workflow.
