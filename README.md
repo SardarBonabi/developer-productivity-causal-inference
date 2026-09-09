@@ -3,26 +3,72 @@
 # How Does an AI Product Impact User Behavior and Outcome?
 # How Does this Impact Vary Across User Segments?
 
-A quasi-experiment estimating the impact of ChatGPT access on developer behavior and outcomes, overall and across user segments.
+Combining a quasi-experiment with machine-learned user segments to estimate how an AI product changes behavior and outcomes—and for whom.
 
-**Quasi-experimentation · Causal inference · Heterogeneous effects · User segmentation · Data engineering**
+**Machine learning · K-Means · Skip-gram embeddings · Hierarchical clustering · Quasi-experimentation · Causal inference**
 
-[Overview](#project-overview) · [Design](#quasi-experimental-design) · [Impact](#impact-on-user-behavior-and-outcomes) · [Segments](#how-impact-varies-across-user-segments) · [Code](#explore-the-implementation)
+[Overview](#project-overview) · [ML](#machine-learning-for-user-segmentation) · [Design](#quasi-experimental-design) · [Impact](#impact-on-user-behavior-and-outcomes) · [Segments](#how-impact-varies-across-user-segments) · [Code](#explore-the-implementation)
 
 </div>
 
 ## Project overview
 
-**I used a quasi-experiment to estimate how an AI product changes user behavior and outcomes, and how those effects vary across user segments.**
+**I combined quasi-experimental causal inference with unsupervised machine learning to estimate how an AI product changes user behavior and outcomes, and how those effects vary across user segments.**
 
 Italy's temporary suspension of ChatGPT in 2023 created an external change in product access. I compared developer activity in Italy with activity in France and Portugal before, during, and after the suspension. This allowed me to estimate the impact of changed access while accounting for stable differences between developers and common changes over time.
 
 The analysis answers two connected questions:
 
 1. **Product impact:** How does access affect code development, knowledge sharing, and skill acquisition?
-2. **Segment differences:** How does that impact vary with developer experience and technology context?
+2. **Segment differences:** How does that impact vary with developer experience and technology context, including **seven user-technology segments derived using machine learning**?
 
-For a product team, the result is evidence about **what the product changes and for whom**. The central work is causal impact estimation and analysis of heterogeneous effects; outcome construction and segmentation support those questions.
+For a product team, the result is evidence about **what the product changes and for whom**. The work connects **causal impact estimation** with **ML-based segmentation**: the quasi-experiment estimates the response to changed access, while learned technology groups structure the analysis of variation across users.
+
+## Machine learning for user segmentation
+
+**I trained K-Means on structural features and used skip-gram embeddings with hierarchical clustering of programming-language co-occurrence across approximately 2 million repositories. This work produced seven user-technology segments, across which I estimated skill-acquisition effects.**
+
+<table>
+<tr><th align="left">Representation learning</th><th align="left">Unsupervised clustering</th><th align="left">Effect heterogeneity</th></tr>
+<tr><td valign="top"><h2>~2M repositories</h2>Programming-language co-occurrence<br><sub>Skip-gram embeddings</sub></td><td valign="top"><h2>7 segments</h2>Empirical user-technology categories<br><sub>K-Means and hierarchical clustering</sub></td><td valign="top"><h2>Segment-level effects</h2>Skill-acquisition responses<br><sub>Connected to the quasi-experiment</sub></td></tr>
+</table>
+
+### **K-Means: segment users using structural features**
+
+**I trained K-Means on structural features to segment users.** This provides a data-driven description of differences between developers, complementing the analysis by experience. The confidential feature definitions and fitted model are not distributed in this showcase.
+
+### **Skip-gram embeddings: learn technology relationships**
+
+**I trained skip-gram embeddings on programming-language co-occurrence across approximately 2 million repositories.** The embeddings represent languages through their observed co-occurrence patterns, providing a learned representation of technology context rather than relying solely on manually specified language categories.
+
+### **Hierarchical clustering: derive empirical technology groups**
+
+**I applied hierarchical clustering to the language representations to derive empirical technology groups.** Together with the user-segmentation work, this resulted in **seven user-technology segments**. I then estimated skill-acquisition effects across these data-driven categories to investigate how the response to AI access differed by technology context.
+
+```mermaid
+flowchart LR
+    A["User structural features"] --> B["K-Means user segmentation"]
+    C["Language co-occurrence<br/>~2M repositories"] --> D["Skip-gram embeddings"]
+    D --> E["Hierarchical technology groups"]
+    B --> F["Seven user-technology segments"]
+    E --> F
+    F --> G["Skill-acquisition effect heterogeneity"]
+    H["Quasi-experimental comparison"] --> G
+    style B fill:#e8effa,stroke:#45658d,color:#172033
+    style D fill:#e8effa,stroke:#45658d,color:#172033
+    style E fill:#e8effa,stroke:#45658d,color:#172033
+    style F fill:#eef2f6,stroke:#64748b,color:#172033
+    style G fill:#e8effa,stroke:#45658d,color:#172033
+```
+
+The diagram summarizes the analytical components, not the proprietary assignment algorithm. **The ML models describe users and technology context; the quasi-experimental design identifies the access-related effects.** Clustering alone does not establish causality.
+
+<details>
+<summary><strong>ML implementation scope</strong></summary>
+
+The [technology-segmentation sample](technology_segments.py) illustrates the embedding and hierarchical-clustering component. It does not reproduce the full K-Means user model, original training settings, or rules assigning users to the seven segments. The completed work is described from the supplied resume; sample settings are representative rather than recovered research parameters.
+
+</details>
 
 ## Quasi-experimental design
 
@@ -31,12 +77,12 @@ For a product team, the result is evidence about **what the product changes and 
 | Design element | Implementation |
 |---|---|
 | Product | ChatGPT |
-| External event/Intervention | Temporary access suspension in Italy |
+| External event | Temporary access suspension in Italy |
 | Treatment group | Developers in Italy |
 | Comparison group | Developers in France and Portugal |
 | Observation window | February 4–May 26, 2023: 8 weeks before, 4 weeks during, and 4 weeks after the suspension |
 | Panel | Repeated developer-week observations |
-| Estimation | Pre-treatment matching and Poisson difference-in-differences with two-way fixed effects |
+| Estimation | Pre-treatment matching and Poisson difference-in-differences |
 
 ```mermaid
 flowchart LR
@@ -107,7 +153,7 @@ The findings show that the response to product access extends across production,
 | Developer experience | Less experienced developers primarily benefited in code development; knowledge sharing and skill acquisition revealed additional benefits among more experienced developers |
 | Technology context | User-technology segmentation provided a way to investigate variation across the technologies developers work with |
 
-To characterize users and their technology context, I used **K-Means on structural features** and **skip-gram language embeddings with hierarchical clustering** across approximately 2 million repositories, deriving seven user-technology segments.
+I estimated **skill-acquisition effects across the seven ML-derived user-technology segments**, connecting the learned categories to the quasi-experiment. The experience analysis and technology-segment analysis address complementary dimensions of heterogeneity.
 
 Segmentation organizes the heterogeneity analysis; clustering alone does not establish a causal effect. The experience findings describe differences in the dimensions of benefit, not a claim that one group benefits more on every outcome. Segment-specific effect sizes are not reproduced in the public samples.
 
@@ -133,7 +179,7 @@ The segment findings can inform hypotheses about who benefits and in what way. T
 
 ## My contribution and data scope
 
-I led problem definition, data collection, outcome construction, feature engineering, causal modeling, segmentation, validation, and interpretation within collaborative doctoral research at UC Irvine.
+I led problem definition, data collection, outcome construction, **feature engineering, K-Means segmentation, skip-gram representation learning, hierarchical clustering**, causal modeling, validation, and interpretation within collaborative doctoral research at UC Irvine.
 
 This analysis uses an activity dataset of **88,022 developers** and a language-history dataset spanning **1,989,535 repositories across 87,536 developers**. Matching and eligibility further determine the estimation samples.
 
@@ -154,7 +200,7 @@ Multithreaded collection and error handling for HPC execution reduced collection
 |---|---|
 | [Collection workflow](collection.py) | Pagination, bounded retries, persistence, and checkpoints |
 | [Behavioral features](panel_features.py) | Weekly outcomes and chronological language adoption |
-| [Technology segments](technology_segments.py) | Representative embeddings and hierarchical grouping |
+| **[ML: technology segmentation](technology_segments.py)** | **Skip-gram embeddings and hierarchical clustering**; representative component of the seven-segment analysis |
 | [Causal design](causal_design.py) | Treatment terms, fixed effects, and inference |
 | [Methodology](methodology.md) | Measurement choices and identification assumptions |
 
