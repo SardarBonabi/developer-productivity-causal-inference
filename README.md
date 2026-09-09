@@ -36,7 +36,7 @@ For a product team, the result is evidence about **what the product changes and 
 | Comparison group | Developers in France and Portugal |
 | Observation window | February 4–May 26, 2023: 8 weeks before, 4 weeks during, and 4 weeks after the suspension |
 | Panel | Repeated developer-week observations |
-| Estimation | Pre-treatment matching and Poisson difference-in-differences |
+| Estimation | Pre-treatment matching and Poisson difference-in-differences with two-way fixed effects |
 
 ```mermaid
 flowchart LR
