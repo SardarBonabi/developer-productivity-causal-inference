@@ -1,6 +1,6 @@
 <div align="center">
 
-# Does an AI Tool Make Developers More Productive?
+# How Does an AI Product Impact Worker Behavior and Outcome?
 
 Measuring output, collaboration, and technology adoption to evaluate product value.
 
