@@ -2,9 +2,11 @@
 
 # Measuring the Impact of the Launch of a Generative AI Product (ChatGPT)
 
+A causal inference case study connecting large-scale behavioral data to product measurement.
+
 ### Developer productivity, collaboration, and skill adoption
 
-A causal inference case study connecting large-scale behavioral data to product measurement.
+
 
 **Product analytics · Quasi-experimentation · Data engineering · User segmentation**
 
