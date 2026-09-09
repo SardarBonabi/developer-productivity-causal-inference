@@ -31,7 +31,7 @@ For a product team, the result is evidence about **what the product changes and 
 | Design element | Implementation |
 |---|---|
 | Product | ChatGPT |
-| External event | Temporary access suspension in Italy |
+| External event/Intervention | Temporary access suspension in Italy |
 | Treatment group | Developers in Italy |
 | Comparison group | Developers in France and Portugal |
 | Observation window | February 4–May 26, 2023: 8 weeks before, 4 weeks during, and 4 weeks after the suspension |
