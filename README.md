@@ -1,6 +1,7 @@
 <div align="center">
 
-# How Does an AI Product Impact User Behavior and Outcome? How Does this Impact Vary Across User Segments?
+# How Does an AI Product Impact User Behavior and Outcome? 
+# How Does this Impact Vary Across User Segments?
 
 Measuring output, collaboration, and technology adoption to evaluate product value.
 
