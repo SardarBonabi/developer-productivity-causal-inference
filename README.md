@@ -1,70 +1,47 @@
 <div align="center">
 
-# How Does an AI Product Impact User Behavior and Outcome? 
+# How Does an AI Product Impact User Behavior and Outcome?
 # How Does this Impact Vary Across User Segments?
 
-Measuring output, collaboration, and technology adoption to evaluate product value.
+A quasi-experiment estimating the impact of ChatGPT access on developer behavior and outcomes, overall and across user segments.
 
-**Product measurement · Causal inference · User segmentation · Data engineering**
+**Quasi-experimentation · Causal inference · Heterogeneous effects · User segmentation · Data engineering**
 
-[Decision](#the-product-decision) · [Results](#results-and-interpretation) · [Approach](#analytical-approach) · [Code](#explore-the-implementation)
+[Overview](#project-overview) · [Design](#quasi-experimental-design) · [Impact](#impact-on-user-behavior-and-outcomes) · [Segments](#how-impact-varies-across-user-segments) · [Code](#explore-the-implementation)
 
 </div>
 
-## The product decision
+## Project overview
 
-**What should count as success when evaluating an AI developer tool—and which users benefit?**
+**I used a quasi-experiment to estimate how an AI product changes user behavior and outcomes, and how those effects vary across user segments.**
 
-A product team needs to know whether a tool helps users accomplish more, contribute to a shared ecosystem, and expand what they can do. A single activity metric can miss these different forms of value. Comparing tool adopters with non-adopters also risks confusing product impact with pre-existing differences between users.
+Italy's temporary suspension of ChatGPT in 2023 created an external change in product access. I compared developer activity in Italy with activity in France and Portugal before, during, and after the suspension. This allowed me to estimate the impact of changed access while accounting for stable differences between developers and common changes over time.
 
-I built a measurement framework across three behaviors and used an external interruption in ChatGPT availability to estimate their response. The analysis uses GitHub activity around Italy's 2023 suspension, with France and Portugal as comparison countries. It provides evidence for designing a product evaluation when random assignment is unavailable.
+The analysis answers two connected questions:
 
-## Results and interpretation
+1. **Product impact:** How does access affect code development, knowledge sharing, and skill acquisition?
+2. **Segment differences:** How does that impact vary with developer experience and technology context?
 
-<table>
-<tr><th align="left">Output</th><th align="left">Technology adoption</th><th align="left">Collaboration</th></tr>
-<tr>
-<td valign="top"><h2>−6.4%</h2>During lost access<br><sub>Repository creation, commits, and pull requests</sub></td>
-<td valign="top"><h2>−8.4%</h2>During lost access<br><sub>First observed use of new programming languages</sub></td>
-<td valign="top"><h2>+9.6%</h2>After access resumed<br><sub>Reviews, issues, and discussions</sub></td>
-</tr>
-</table>
+For a product team, the result is evidence about **what the product changes and for whom**. The central work is causal impact estimation and analysis of heterogeneous effects; outcome construction and segmentation support those questions.
 
-These are adjusted relative effects from matched difference-in-differences. The post-restoration estimate is relative to the **pre-suspension baseline**, not the suspension period. They measure different outcomes and cannot be added into one productivity lift.
+## Quasi-experimental design
 
-**Decision relevance:** evaluate value across output, collaboration, and adoption of unfamiliar technologies. The evidence also suggests different benefits by experience: less experienced developers primarily benefited in code development, while collaboration and skill acquisition revealed additional benefits among more experienced developers.
+### Use an external change in product access
 
-## How this would inform a product evaluation
-
-| Decision | Application of the evidence | Additional evidence needed |
-|---|---|---|
-| Define launch success | Track several dimensions of user success, with quality guardrails alongside activity | Direct quality measures and the product's intended user outcomes |
-| Choose target segments | Estimate effects by experience and technology context | Segment-level results for the product and population being considered |
-| Set the evaluation window | Separate immediate changes from later collaboration responses | Longer follow-up to assess persistence |
-| Assess investment | Use the findings to motivate a product experiment | Retention, costs, and commercial outcomes before estimating ROI |
-
-These are proposed product applications. The analysis did not test a commercial rollout, retention strategy, or revenue impact.
-
-## Analytical approach
-
-### 1. Define a metric system around user outcomes
-
-| Metric family | Weekly measurement | Interpretation |
-|---|---|---|
-| Output | Repository creations, commits, and pull requests | Observable activity; not a direct measure of useful or correct code |
-| Collaboration | Reviews, issue reports, and discussions | Participation in knowledge sharing; not its value to recipients |
-| Technology adoption | First observed programming-language use in repository history | An adoption proxy for skill acquisition; not a proficiency assessment |
-
-Historical coverage prevents previously used languages from being mislabeled as new. Consistent developer-week construction prevents incomplete collection from being interpreted as inactivity.
-
-### 2. Estimate impact without relying on self-selected adoption
-
-I matched developers using pre-treatment characteristics and compared changes in Italy with changes in France and Portugal.
+| Design element | Implementation |
+|---|---|
+| Product | ChatGPT |
+| External event | Temporary access suspension in Italy |
+| Treatment group | Developers in Italy |
+| Comparison group | Developers in France and Portugal |
+| Observation window | February 4–May 26, 2023: 8 weeks before, 4 weeks during, and 4 weeks after the suspension |
+| Panel | Repeated developer-week observations |
+| Estimation | Pre-treatment matching and Poisson difference-in-differences |
 
 ```mermaid
 flowchart LR
-    A["Baseline: 8 weeks"] --> B["Access suspended: 4 weeks"] --> C["Access restored: 4 weeks"]
-    D["France and Portugal: comparison trends"] -.-> B
+    A["Before suspension<br/>8 weeks"] --> B["Access suspended in Italy<br/>4 weeks"] --> C["Access restored<br/>4 weeks"]
+    D["France and Portugal<br/>Comparison trends"] -.-> B
     D -.-> C
     style A fill:#eef2f6,stroke:#64748b,color:#172033
     style B fill:#e8effa,stroke:#45658d,color:#172033
@@ -72,9 +49,13 @@ flowchart LR
     style D fill:#ffffff,stroke:#94a3b8,color:#172033
 ```
 
-The February 4–May 26, 2023 window supports an analysis of **country-level availability**, rather than individual ChatGPT usage, which is not directly observed.
+This was an externally occurring quasi-experiment, not a randomized rollout. The treatment is a change in **country-level product availability**; individual ChatGPT use is not directly observed.
 
-I used **Poisson difference-in-differences with developer and week fixed effects**, working-day controls, and developer-clustered standard errors. This accommodates nonnegative, skewed activity outcomes while accounting for stable user differences, common time shocks, and repeated observations.
+### Estimate changes relative to a comparison group
+
+I matched developers on pre-treatment characteristics to improve observed comparability. I then used **Poisson difference-in-differences with developer and week fixed effects**, working-day controls, and developer-clustered standard errors.
+
+The model compares changes in the treated group with contemporaneous changes in the comparison group. Developer effects account for stable individual differences; week effects account for common time shocks. Poisson estimation accommodates nonnegative, skewed activity outcomes, and clustering accounts for repeated observations from the same developer.
 
 <details>
 <summary><strong>Model specification and effect interpretation</strong></summary>
@@ -90,19 +71,80 @@ The pre-suspension period is the reference. Proportional effects are `100 × (ex
 
 </details>
 
-### 3. Check credibility and explain variation
+## Impact on user behavior and outcomes
 
-I examined pre-treatment patterns using lead-lag estimates and investigated GitHub Copilot language coverage as a competing explanation. Matching improves observed comparability; unobserved differential shocks remain a threat. An insignificant pre-trend test does not establish parallel counterfactual trends.
+I estimated effects on three dimensions of developer behavior:
 
-To investigate variation, I combined **K-Means on structural features** with **skip-gram language embeddings and hierarchical clustering** across approximately 2 million repositories, deriving seven user-technology segments. Segmentation connects average effects to differences in experience and technology context.
+| Outcome | Weekly operational measure | What the measure captures |
+|---|---|---|
+| Code development | Repository creations, commits, and pull requests | Production activity |
+| Knowledge sharing | Reviews, issue reports, and discussions | Collaborative contribution |
+| Skill acquisition | First observed programming-language use in repository history | Adoption of a previously unobserved technology |
 
-## What I owned and delivered
+Historical language coverage helps distinguish new adoption from previous use. Consistent developer-week construction also prevents incomplete collection from being interpreted as inactivity. These outcomes measure observable behavior: they are not direct assessments of code correctness, contribution usefulness, or proficiency.
 
-I led problem definition, KPI design, collection, feature engineering, modeling, validation, and interpretation. Across the shared research program, my automated Python pipeline screened approximately **127 million users and 320 million repositories** and produced a resource covering **680,000 developers, 2 million repositories, and 13.6 million user-weeks**. Multithreaded collection and error handling for HPC execution reduced collection time from approximately **five months to under three weeks**, with records persisted in **PostgreSQL and MongoDB**.
+### Estimated effects
 
-This analysis uses an activity dataset of **88,022 developers** and a language-history dataset spanning **1,989,535 repositories across 87,536 developers**. Matching and eligibility further determine model samples; the broader infrastructure totals are not the study sample size.
+<table>
+<tr><th align="left">Output</th><th align="left">Technology adoption</th><th align="left">Collaboration</th></tr>
+<tr>
+<td valign="top"><h2>−6.4%</h2>During lost access<br><sub>Repository creation, commits, and pull requests</sub></td>
+<td valign="top"><h2>−8.4%</h2>During lost access<br><sub>First observed use of new programming languages</sub></td>
+<td valign="top"><h2>+9.6%</h2>After access resumed<br><sub>Reviews, issues, and discussions</sub></td>
+</tr>
+</table>
 
-The deliverable is a framework connecting **user-success metrics, causal estimation, and segmentation**. Its findings inform hypotheses for product testing; they do not establish revenue, retention, correctness, or long-term proficiency effects.
+These are adjusted relative effects from matched difference-in-differences. The post-restoration estimate is relative to the **pre-suspension baseline**, not the suspension period. They measure different outcomes and cannot be added into one productivity lift.
+
+The findings show that the response to product access extends across production, collaboration, and technology adoption. The timing also matters: the code-development and skill-acquisition estimates describe the suspension, while the knowledge-sharing estimate describes the period after access resumed.
+
+## How impact varies across user segments
+
+**The second part of the analysis asks whether the same product affects different users in different ways.** I examined differences by developer experience and technology context rather than treating the overall effect as representative of every user.
+
+| Segment dimension | Finding or analytical role |
+|---|---|
+| Developer experience | Less experienced developers primarily benefited in code development; knowledge sharing and skill acquisition revealed additional benefits among more experienced developers |
+| Technology context | User-technology segmentation provided a way to investigate variation across the technologies developers work with |
+
+To characterize users and their technology context, I used **K-Means on structural features** and **skip-gram language embeddings with hierarchical clustering** across approximately 2 million repositories, deriving seven user-technology segments.
+
+Segmentation organizes the heterogeneity analysis; clustering alone does not establish a causal effect. The experience findings describe differences in the dimensions of benefit, not a claim that one group benefits more on every outcome. Segment-specific effect sizes are not reproduced in the public samples.
+
+## Assessing the causal interpretation
+
+I examined pre-treatment patterns with lead-lag estimates and investigated GitHub Copilot language coverage as a competing explanation.
+
+| Check or assumption | Why it matters |
+|---|---|
+| Pre-treatment matching | Improves comparability on observed characteristics before access changed |
+| Pre-treatment trends | Assesses whether the groups showed different patterns before the suspension |
+| Developer and week fixed effects | Accounts for stable user differences and common time shocks |
+| Developer-clustered inference | Accounts for dependence across repeated observations |
+| Alternative technology access | Helps assess competing explanations for the observed response |
+
+The causal interpretation depends on the comparison group representing the treated group's counterfactual trend. Matching cannot remove unobserved differential shocks, and an insignificant pre-trend test does not prove that assumption. The results apply to this access interruption and population; effects of a new launch or another AI product would require their own evaluation.
+
+## What the analysis tells a product team
+
+The analysis provides an estimate of **which behaviors respond to product access, the direction and magnitude of those responses, and how benefits differ across users**. It supports a more specific account of product impact than a single population-average activity change.
+
+The segment findings can inform hypotheses about who benefits and in what way. They do not establish a tested targeting policy. Revenue, retention, and ROI were outside this analysis; the measured outcomes are developer production, collaboration, and technology adoption.
+
+## My contribution and data scope
+
+I led problem definition, data collection, outcome construction, feature engineering, causal modeling, segmentation, validation, and interpretation within collaborative doctoral research at UC Irvine.
+
+This analysis uses an activity dataset of **88,022 developers** and a language-history dataset spanning **1,989,535 repositories across 87,536 developers**. Matching and eligibility further determine the estimation samples.
+
+<details>
+<summary><strong>Data engineering supporting the analysis</strong></summary>
+
+Across the shared research program, my automated Python pipeline screened approximately **127 million users and 320 million repositories** and produced a resource covering **680,000 developers, 2 million repositories, and 13.6 million user-weeks**. These are broader infrastructure totals, not this study's estimation sample.
+
+Multithreaded collection and error handling for HPC execution reduced collection time from approximately **five months to under three weeks**, with records persisted in **PostgreSQL and MongoDB**.
+
+</details>
 
 ## Explore the implementation
 
@@ -119,7 +161,7 @@ The deliverable is a framework connecting **user-success metrics, causal estimat
 <details>
 <summary><strong>Research source and sample scope</strong></summary>
 
-This case study presents my contributions to collaborative doctoral research at UC Irvine, framed around the product decisions the analysis can inform. The underlying study is *Beyond Code: The Multidimensional Impacts of Large Language Models in Software Development*. Product applications described here are proposed uses of the evidence, not claims of a commercial deployment or a tested product rollout.
+This case study presents my contributions to collaborative doctoral research at UC Irvine, focused on estimating product impact and differences across user segments. The underlying study is *Beyond Code: The Multidimensional Impacts of Large Language Models in Software Development*.
 
 Public files include selected refactored examples and representative reconstructions. They do not reproduce the research estimates. See [code provenance and scope](code-notes.md).
 
