@@ -5,7 +5,7 @@
 
 Combining a quasi-experiment with machine-learned user segments to estimate how an AI product changes user behavior and outcomes, and what are its heterogenous impacts across user groups.
 
-**Machine learning · K-Means · Skip-gram embeddings · Hierarchical clustering · Quasi-experimentation · Causal inference**
+**Causal inference · Quasi-experimentation · Machine learning · K-Means · Skip-gram embeddings · Hierarchical clustering**
 
 [Overview](#project-overview) · [ML](#machine-learning-for-user-segmentation) · [Design](#quasi-experimental-design) · [Impact](#impact-on-user-behavior-and-outcomes) · [Segments](#how-impact-varies-across-user-segments) · [Code](#explore-the-implementation)
 
