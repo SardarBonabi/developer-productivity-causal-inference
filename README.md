@@ -3,7 +3,7 @@
 # How Does an AI Product Impact User Behavior and Outcome?
 # How Does this Impact Vary Across User Segments?
 
-Combining a quasi-experiment with machine-learned user segments to estimate how an AI product changes behavior and outcomes—and for whom.
+Combining a quasi-experiment with machine-learned user segments to estimate how an AI product changes user behavior and outcomes, and what are its heterogenous impacts across user groups.
 
 **Machine learning · K-Means · Skip-gram embeddings · Hierarchical clustering · Quasi-experimentation · Causal inference**
 
