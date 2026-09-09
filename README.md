@@ -1,6 +1,6 @@
 <div align="center">
 
-# Measuring the Product Impact of Generative AI
+# Measuring the Impact of the Launch of a Generative AI Product (ChatGPT)
 
 ### Developer productivity, collaboration, and skill adoption
 
