@@ -1,4 +1,4 @@
-"""Representative reconstruction of the resume-described embedding workflow.
+"""Representative reconstruction of the embedding workflow.
 
 Research status and code availability
 -------------------------------------

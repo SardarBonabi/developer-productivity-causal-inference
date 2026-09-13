@@ -3,9 +3,9 @@
 # How Does an AI Product Impact User Behavior and Outcome?
 # How Does this Impact Vary Across User Segments?
 
-Combining a quasi-experiment with machine-learned user segments to estimate how an AI product changes user behavior and outcomes, and what are its heterogenous impacts across user groups.
+Combining a quasi-experiment with machine-learned user segments to estimate how an AI product changes behavior and outcomes—and for whom.
 
-**Causal inference · Quasi-experimentation · Machine learning · K-Means · Skip-gram embeddings · Hierarchical clustering**
+**Machine learning · K-Means · Skip-gram embeddings · Hierarchical clustering · Quasi-experimentation · Causal inference**
 
 [Overview](#project-overview) · [ML](#machine-learning-for-user-segmentation) · [Design](#quasi-experimental-design) · [Impact](#impact-on-user-behavior-and-outcomes) · [Segments](#how-impact-varies-across-user-segments) · [Code](#explore-the-implementation)
 
@@ -66,7 +66,7 @@ The diagram summarizes the analytical components, not the proprietary assignment
 <details>
 <summary><strong>ML implementation scope</strong></summary>
 
-The [technology-segmentation sample](technology_segments.py) illustrates the embedding and hierarchical-clustering component. It does not reproduce the full K-Means user model, original training settings, or rules assigning users to the seven segments. The completed work is described from the supplied resume; sample settings are representative rather than recovered research parameters.
+The [technology-segmentation sample](technology_segments.py) illustrates the embedding and hierarchical-clustering component. It does not reproduce the full K-Means user model, original training settings, or rules assigning users to the seven segments. Sample settings are illustrative; original research parameters are proprietary.
 
 </details>
 

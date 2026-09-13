@@ -2,13 +2,13 @@
 
 > **Research status and code availability:** The research is currently under review. The full research code and data are proprietary and are not distributed here. The public code consists only of selected, simplified samples of the general workflow; it is not the complete research implementation or a replication package.
 
-The research accomplishments are described from Sardar Fatooreh Bonabi's account of his completed work. The manuscripts provide study context and findings. This release selectively illustrates methods without distributing the full proprietary implementations.
+This release presents selected research workflows without distributing the full proprietary implementations.
 
 | File | Relationship to the research |
 |---|---|
 | collection.py | Representative rewrite of pagination, retries, persistence, and restart logic visible in the collection archive. Production concurrency and database adapters are omitted. |
 | panel_features.py | First-use logic refactored from the supplied language-processing script; activity aggregation is a representative consolidation. Timestamp tie handling is an explicit public-example adaptation. |
-| technology_segments.py | Reconstructed example of the embedding and clustering work described in the resume; original implementation and hyperparameters are proprietary. |
+| technology_segments.py | Reconstructed example of the embedding and clustering work; original implementation and hyperparameters are proprietary. |
 | causal_design.py | Declarative summary of the manuscript model, not an executable PPML estimator. |
 
 ## What was refactored
