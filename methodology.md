@@ -18,6 +18,22 @@ The treatment-by-suspension and treatment-by-restoration coefficients are distin
 
 The completed research included K-Means on structural features and skip-gram language embeddings with hierarchical clustering to derive seven user-technology segments. The public embedding sample demonstrates the language-grouping component. It does not recreate the original hyperparameters, corpus filters, or user-assignment rules. Repository histories, technology exposure, and experience provide ways to investigate why average effects differ across users.
 
+### Reading the ML sample correctly
+
+The [embedding sample](technology_segments.py) returns a mapping from **programming language to cluster label**. Its `groups=7` default is an illustrative language-clustering setting; it does not reproduce or validate the research's seven user-technology segments.
+
+| Stage | Unit being represented | Output or role |
+|---|---|---|
+| **Skip-gram embeddings** | Programming languages appearing together within repositories | A vector representation for each language |
+| **Hierarchical clustering** | Language vectors | Language-to-cluster mapping in the public sample |
+| **K-Means user segmentation** | Users described by structural features | A separate component of the completed segmentation work |
+| User-technology assignment | Users and their technology histories | Proprietary aggregation and assignment rules; not implemented in this excerpt |
+| Heterogeneous-effect analysis | Outcomes across user segments | Causal comparisons supported by the quasi-experimental design |
+
+Cluster labels are identifiers, not ranked scores or measures of skill. A language cluster is not a user label, and similarity in embedding space is not evidence that users receive the same treatment effect. The causal analysis supplies the impact estimates; clustering supplies a way to organize technological differences.
+
+The excerpt expects repository-level language lists from a pre-treatment corpus. Corpus eligibility, time filtering, structural-feature construction, and user assignment occur outside this sample. A fixed training seed aids repeatability of the illustration, but does not establish cluster stability or reproduce the proprietary fitted models.
+
 ## Scope of inference
 
 The findings concern this setting and access interruption. Actual individual ChatGPT use is not directly observed. Country assignment, other tools, concurrent shocks, and the operational nature of the learning measure constrain interpretation. Repository coverage and matching restrictions distinguish the study's estimation samples from the broader collection resource.
