@@ -198,7 +198,7 @@ Multithreaded collection and error handling for HPC execution reduced collection
 
 | Sample | What to inspect |
 |---|---|
-| [Collection workflow](collection.py) | Pagination, bounded retries, persistence, and checkpoints |
+| [Modular data collection](data-collection.md) | Stage-by-stage workflow, bounded multithreading, validation, PostgreSQL persistence, and recovery |
 | [Behavioral features](panel_features.py) | Weekly outcomes and chronological language adoption |
 | **[ML: technology segmentation](technology_segments.py)** | **Skip-gram embeddings and hierarchical clustering**; representative component of the seven-segment analysis |
 | [Causal design](causal_design.py) | Treatment terms, fixed effects, and inference |

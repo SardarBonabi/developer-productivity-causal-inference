@@ -1,55 +1,53 @@
-"""Representative reconstruction of the archive's paginated collection workflow.
+"""Study-specific collection orchestration; representative workflow sample.
 
-Research status and code availability
--------------------------------------
-The research is currently under review. The full research code and data
-are proprietary and are not distributed here. This file is a simplified
-sample of the general workflow, not the complete research implementation
-or a replication package.
-
-
-No live endpoint, credentials, or storage implementation is included. Callbacks
-make the acquisition, persistence, and checkpoint responsibilities explicit.
-The production pipeline also used parallel collection and SQL/NoSQL storage.
+Research under review. Full research code and data remain proprietary. Private
+source adapters, selection rules and execution configuration are not distributed.
 """
-from dataclasses import dataclass
-from time import sleep
-from typing import Callable, Iterable
+from typing import Iterable, Protocol
+
+from collection_contracts import Job
+from collection_runtime import WorkerResources, run_jobs
+
+PROJECT = 'developer-productivity-causal-inference'
+STAGES = ('discovery', 'profiles', 'weekly_activity', 'repositories', 'languages')
 
 
-@dataclass(frozen=True)
-class Page:
-    records: list[dict]
-    next_cursor: str | None
+class Manifest(Protocol):
+    def partitions(self, project: str, snapshot: str, stage: str) -> Iterable[Job]:
+        """Resolve unique, non-overlapping jobs from committed upstream records.
+
+        Implemented privately: discovery pagination, profile/country eligibility,
+        immutable date windows, entity resolution, deduplicated references and
+        partition sizing. A snapshot binds both the inputs and parser version.
+        """
+        ...
 
 
-def collect_partition(
-    start_cursor: str,
-    fetch_page: Callable[[str], Page],
-    persist_records: Callable[[Iterable[dict]], None],
-    save_checkpoint: Callable[[str | None], None],
-    max_attempts: int = 4,
-) -> int:
-    """Persist each page before advancing its restart checkpoint.
+def collect_study(manifest: Manifest, resources: WorkerResources,
+                  snapshot: str, workers: int = 4):
+    """Run ordered stages; block downstream work if any partition is incomplete.
 
-    fetch_page owns authentication, timeouts, and rate-limit response handling.
-    persist_records must be idempotent: a crash between persistence and checkpoint
-    may replay a page. Permanent API failures should not be translated to TimeoutError.
+    Re-running the same manifest skips completed jobs and resumes interrupted
+    ones. A fresh snapshot is required when inputs or extraction rules change.
     """
-    if max_attempts < 1:
-        raise ValueError("max_attempts must be positive")
-    cursor, processed = start_cursor, 0
-    while cursor is not None:
-        for attempt in range(max_attempts):
-            try:
-                page = fetch_page(cursor)
-                break
-            except TimeoutError:
-                if attempt + 1 == max_attempts:
-                    raise
-                sleep(min(2 ** attempt, 30))
-        persist_records(page.records)
-        save_checkpoint(page.next_cursor)
-        processed += len(page.records)
-        cursor = page.next_cursor
-    return processed
+    summary = {}
+    for stage in STAGES:
+        completed = failed = written = total = 0
+
+        def checked_jobs():
+            for job in manifest.partitions(PROJECT, snapshot, stage):
+                if (job.project, job.snapshot, job.stage) != (PROJECT, snapshot, stage):
+                    raise ValueError('Manifest scope mismatch')
+                yield job
+
+        for outcome in run_jobs(checked_jobs(), resources, workers=workers):
+            total += 1
+            completed += outcome.status == 'complete'
+            failed += outcome.status != 'complete'
+            written += outcome.records_written
+        summary[stage] = {'complete_partitions': completed, 'failed_partitions': failed,
+                          'records_written_this_run': written}
+        if failed or total == 0:
+            # Empty manifests need explicit review; do not silently certify coverage.
+            return {'status': 'incomplete', 'stages': summary}
+    return {'status': 'complete', 'stages': summary}
