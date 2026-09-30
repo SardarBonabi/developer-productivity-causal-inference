@@ -14,14 +14,16 @@ corpus. This excerpt clusters languages; assigning user segments requires a
 separate aggregation rule and is intentionally outside the sample.
 """
 import numpy as np
-from gensim.models import Word2Vec
-from scipy.cluster.hierarchy import linkage, cut_tree
+from language_corpus import prepare_language_corpus
 
 
 def language_groups(repository_languages: list[list[str]], groups: int = 7):
-    corpus = [sorted(set(languages)) for languages in repository_languages if languages]
-    if len({language for row in corpus for language in row}) < groups:
-        raise ValueError("Need at least one distinct language per requested group")
+    corpus, vocabulary = prepare_language_corpus(repository_languages, groups)
+    if len(vocabulary) == 1:
+        return {vocabulary[0]: 0}
+    from gensim.models import Word2Vec
+    from scipy.cluster.hierarchy import linkage, cut_tree
+
     # Cover the whole repository list so arbitrary language ordering does not
     # exclude co-occurrence pairs. Fixed seeds aid this representative example.
     model = Word2Vec(
