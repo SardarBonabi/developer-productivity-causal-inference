@@ -13,7 +13,7 @@ Input is repository-level lists of languages from an approved pre-treatment
 corpus. This excerpt clusters languages; assigning user segments requires a
 separate aggregation rule and is intentionally outside the sample.
 """
-import numpy as np
+from embedding_geometry import normalize_embeddings
 from language_corpus import prepare_language_corpus
 
 
@@ -31,8 +31,7 @@ def language_groups(repository_languages: list[list[str]], groups: int = 7):
         min_count=1, sg=1, workers=1, seed=42, epochs=20,
     )
     languages = sorted(model.wv.index_to_key)
-    embeddings = np.array([model.wv[name] for name in languages])
-    embeddings /= np.maximum(np.linalg.norm(embeddings, axis=1, keepdims=True), 1e-12)
+    embeddings = normalize_embeddings([model.wv[name] for name in languages])
     tree = linkage(embeddings, method="average", metric="cosine")
     labels = cut_tree(tree, n_clusters=groups).ravel()
     return dict(zip(languages, labels.tolist()))
