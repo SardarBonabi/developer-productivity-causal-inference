@@ -16,6 +16,7 @@ import pandas as pd
 
 from feature_validation import validate_feature_input
 from feature_time import utc_creation_times
+from activity_totals import checked_weekly_totals, ensure_finite_totals
 
 
 def first_language_use(repositories: pd.DataFrame, language_columns: list[str]):
@@ -49,8 +50,10 @@ def weekly_activity(activity: pd.DataFrame):
     sharing = ["reviews", "issues", "discussions"]
     columns = production + sharing
     validate_feature_input(activity, ["developer", "week"], columns)
-    weekly = activity.groupby(["developer", "week"], observed=True)[columns].sum()
-    return weekly.assign(
+    weekly = checked_weekly_totals(activity, ["developer", "week"], columns)
+    result = weekly.assign(
         code_development=weekly[production].sum(axis=1),
         knowledge_sharing=weekly[sharing].sum(axis=1),
-    ).reset_index()
+    )
+    ensure_finite_totals(result)
+    return result.reset_index()
