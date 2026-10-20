@@ -15,6 +15,7 @@ weekly_activity is a representative consolidation of the activity workflow.
 import pandas as pd
 
 from feature_validation import validate_feature_input
+from feature_time import utc_creation_times
 
 
 def first_language_use(repositories: pd.DataFrame, language_columns: list[str]):
@@ -25,7 +26,7 @@ def first_language_use(repositories: pd.DataFrame, language_columns: list[str]):
     """
     validate_feature_input(repositories, ["developer", "created_at"], language_columns)
     data = repositories.copy()
-    data["created_at"] = pd.to_datetime(data["created_at"], utc=True)
+    data["created_at"] = utc_creation_times(data["created_at"])
     if data[["developer", "created_at"] + language_columns].isna().any().any():
         raise ValueError("Missing identity, time, or language measurement")
     used = data[language_columns].gt(0)
