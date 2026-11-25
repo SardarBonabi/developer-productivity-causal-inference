@@ -4,44 +4,12 @@ Research under review. No live clients, credentials or private job manifests.
 """
 from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from dataclasses import dataclass
-from math import isfinite
-from random import uniform
-from time import sleep
 from typing import Callable, ContextManager, Iterable
 
-from collection_contracts import CollectionError, Job, Permanent, Retryable, Source, Store
+from collection_contracts import CollectionError, Job, Permanent, Source, Store
 from collection_transforms import normalize_page
+from collection_retry import RetryPolicy, fetch_with_retry
 
-
-@dataclass(frozen=True)
-class RetryPolicy:
-    attempts: int = 4
-    backoff_cap: float = 30
-    max_inline_wait: float = 120
-
-    def __post_init__(self):
-        if self.attempts < 1 or self.backoff_cap <= 0 or self.max_inline_wait <= 0:
-            raise ValueError('Invalid retry policy')
-
-
-def fetch_with_retry(source, job, cursor, policy, pause=sleep, jitter=uniform):
-    """Retry a failed fetch at the same cursor; leave long waits for a later run.
-
-    The private source maps timeouts, temporary server errors and throttling to
-    Retryable. Invalid authentication/permissions are Permanent. Its shared rate
-    budget must coordinate all workers using the same authorized identity.
-    """
-    for attempt in range(policy.attempts):
-        try:
-            return source.fetch(job, cursor)
-        except Retryable as error:
-            if attempt + 1 == policy.attempts:
-                raise
-            delay = max(error.retry_after, jitter(0, min(2 ** attempt, policy.backoff_cap)))
-            if not isfinite(delay) or delay < 0 or delay > policy.max_inline_wait:
-                raise  # Never shorten a server-directed cooldown to fit a cap.
-            pause(delay)
-    raise AssertionError('Unreachable')
 
 
 def collect_partition(job: Job, source: Source, store: Store,
