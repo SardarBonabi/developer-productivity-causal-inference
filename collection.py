@@ -6,6 +6,7 @@ source adapters, selection rules and execution configuration are not distributed
 from typing import Iterable, Protocol
 
 from collection_contracts import Job
+from collection_manifest import checked_partitions
 from collection_runtime import WorkerResources, run_jobs
 
 PROJECT = 'developer-productivity-causal-inference'
@@ -34,13 +35,10 @@ def collect_study(manifest: Manifest, resources: WorkerResources,
     for stage in STAGES:
         completed = failed = written = total = 0
 
-        def checked_jobs():
-            for job in manifest.partitions(PROJECT, snapshot, stage):
-                if (job.project, job.snapshot, job.stage) != (PROJECT, snapshot, stage):
-                    raise ValueError('Manifest scope mismatch')
-                yield job
-
-        for outcome in run_jobs(checked_jobs(), resources, workers=workers):
+        jobs = checked_partitions(
+            manifest.partitions(PROJECT, snapshot, stage), PROJECT, snapshot, stage,
+        )
+        for outcome in run_jobs(jobs, resources, workers=workers):
             total += 1
             completed += outcome.status == 'complete'
             failed += outcome.status != 'complete'

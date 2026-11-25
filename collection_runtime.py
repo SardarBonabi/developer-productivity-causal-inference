@@ -54,8 +54,8 @@ def run_jobs(jobs: Iterable[Job], resources: WorkerResources,
     Inputs are unique partitions from a private manifest. Outcomes are returned
     to the private scheduler for targeted recovery, never printed with payloads.
     """
-    if workers < 1:
-        raise ValueError('workers must be positive')
+    if type(workers) is not int or workers < 1:
+        raise ValueError('workers must be a positive integer')
 
     def worker(job):
         try:
